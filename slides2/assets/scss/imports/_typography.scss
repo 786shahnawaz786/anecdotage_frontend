@@ -1,0 +1,22 @@
+@import url(//db.onlinewebfonts.com/c/f9e3f78cb6c6b737eda3859758ba1c8b?family=Axis);
+@font-face {font-family: "Axis"; src: url("//db.onlinewebfonts.com/t/f9e3f78cb6c6b737eda3859758ba1c8b.eot"); src: url("//db.onlinewebfonts.com/t/f9e3f78cb6c6b737eda3859758ba1c8b.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/f9e3f78cb6c6b737eda3859758ba1c8b.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/f9e3f78cb6c6b737eda3859758ba1c8b.woff") format("woff"), url("//db.onlinewebfonts.com/t/f9e3f78cb6c6b737eda3859758ba1c8b.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/f9e3f78cb6c6b737eda3859758ba1c8b.svg#Axis") format("svg"); }
+
+
+@import url(//db.onlinewebfonts.com/c/275de2221d9f0c4c9257d17f5a1e4006?family=Avenir+Black);
+font-face {font-family: "Avenir Black"; src: url("//db.onlinewebfonts.com/t/275de2221d9f0c4c9257d17f5a1e4006.eot"); src: url("//db.onlinewebfonts.com/t/275de2221d9f0c4c9257d17f5a1e4006.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/275de2221d9f0c4c9257d17f5a1e4006.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/275de2221d9f0c4c9257d17f5a1e4006.woff") format("woff"), url("//db.onlinewebfonts.com/t/275de2221d9f0c4c9257d17f5a1e4006.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/275de2221d9f0c4c9257d17f5a1e4006.svg#Avenir Black") format("svg"); }
+
+
+@font-face {
+  font-family: 'dessaudemibold';
+  src: url('~assets/fonts/dessau_demibold-webfont.woff2') format('woff2'),
+       url('~assets/fonts/dessau_demibold-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+
+.logo_text{
+  font-family: 'dessaudemibold';
+  cursor: pointer;
+}

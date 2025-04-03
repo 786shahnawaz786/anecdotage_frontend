@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*.local
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Build files
+dist/
+*.local
+
+# Dependency directories
+/.pnp
+.pnp.js
+
+# Cache files
+/.cache
+/tmp
+
+# Test coverage
+/coverage
+
+# Vue-specific files
+public/hot
+public/storage
+storage/*.key
