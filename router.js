@@ -5,9 +5,9 @@ Vue.use(Router);
 const page = path => () => import(`~/pages/${path}`).then(m => m.default || m);
 
 const routes = [
-  { path: '/', name: 'index', component: page('index.vue') },
-  { path: '/index.php', name: 'index', component: page('aid.vue') },
-  { path: '/browse.php', name: 'index', component: page('aid.vue') },
+  { path: '/', name: 'index-hone', component: page('index.vue') },
+  { path: '/index.php', name: 'index-index', component: page('aid.vue') },
+  { path: '/browse.php', name: 'index-browse', component: page('aid.vue') },
   { path: '/articles/:attribute/:value', name: 'index', component: page('aid.vue') },
   { path: '/faq', name: 'faq', component: page('faq.vue') },
   { path: '/tos', name: 'tos', component: page('tos.vue') },
@@ -25,6 +25,7 @@ const routes = [
   { path: '/books/admin', name: 'books', component: page('books/viewbooks.vue'), meta: { requiresAdmin: true } },
   { path: '/books', name: 'listbooks', component: page('books/Listbooks.vue'), meta: { requiresAdmin: true } },
   { path: '/books/showtabledatabase', name: 'showtabledatabase', component: page('books/showtabledatabase.vue'), meta: { requiresAdmin: true } },
+  { path: '/books/covers', name: 'bookscoverImage', component: page('books/covers.vue')},
 
   { path: '/register', name: 'register', component: page('auth/register.vue') },
   {
@@ -215,6 +216,11 @@ const routes = [
     path: '/threads/create',
     name: 'threads.create',
     component: page('threads/create.vue')
+  },
+  {
+    path: '/threads/batch',
+    name: 'threads.batch',
+    component: page('threads/batch.vue')
   },
   {
     path: '/anecdotes/:slug/edit',

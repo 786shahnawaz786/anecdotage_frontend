@@ -1,10 +1,14 @@
 require('dotenv').config();
 const PRIMARY_HOSTS = `anecdotage.com`;
-const axios = require('axios');
+import axios from 'axios'; // Use ESM import
 
 export default {
   mode: 'universal',
-  target: 'server',
+  target: 'static',
+  ssr:true,
+  serverMiddleware: [
+    '~/plugins/logger.js'
+  ],
   head: {
     title: 'Anecdotage',
     meta: [
@@ -34,6 +38,7 @@ export default {
   },
   plugins: [
     '~plugins/vform',
+     '~/plugins/error-handler.js',
     '~/plugins/toastNotification',
     { src: '~/plugins/gmaps', ssr: false },
     { src: '~/plugins/echo', ssr: false },
@@ -171,5 +176,8 @@ export default {
     base: process.env.NODE_ENV === 'dev' ? '/' : '/',
     trailingSlash: true,
   },
+  generate:{
+    dir: 'dist', 
+  }
 };
 

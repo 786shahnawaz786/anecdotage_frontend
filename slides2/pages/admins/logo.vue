@@ -3,22 +3,13 @@
     <div class="col-md-12">
       <form @submit.prevent="updateLogo" enctype="multipart/form-data">
         <div class="form-group row">
-          <label for="site_logo" class="control-label col-sm-3"
-            >Select Logo Image</label
-          >
+          <label for="site_logo" class="control-label col-sm-3">Select Logo Image</label>
           <div class="col-sm-9">
             <div class="image-placeholder" @click="OpenLogoImgUpload">
               <img :src="logoThumb" width="100%" />
             </div>
-            <input
-              style="display: none"
-              type="file"
-              name="site_logo"
-              id="site_logo"
-              accept="image/*"
-              class="form-control"
-              @change="onLogoFileSelected"
-            />
+            <input style="display: none" type="file" name="site_logo" id="site_logo" accept="image/*"
+              class="form-control" @change="onLogoFileSelected" />
           </div>
         </div>
         <div class="form-group row">
@@ -32,30 +23,18 @@
       <hr />
       <form @submit.prevent="updateFavicon" enctype="multipart/form-data">
         <div class="form-group row">
-          <label for="site_favicon" class="control-label col-sm-3"
-            >Select Favicon Image</label
-          >
+          <label for="site_favicon" class="control-label col-sm-3">Select Favicon Image</label>
           <div class="col-sm-9">
             <div class="image-placeholder" @click="OpenFaviconImgUpload">
               <img :src="faviconThumb" width="100%" />
             </div>
-            <input
-              style="display: none"
-              type="file"
-              name="site_favicon"
-              id="site_favicon"
-              accept="image/*"
-              class="form-control"
-              @change="onFaviconFileSelected"
-            />
+            <input style="display: none" type="file" name="site_favicon" id="site_favicon" accept="image/*"
+              class="form-control" @change="onFaviconFileSelected" />
           </div>
         </div>
         <div class="form-group row">
           <div class="col-sm-9 offset-sm-3">
-            <button
-              class="btn btn-primary"
-              :disabled="selectFaviconFile == null"
-            >
+            <button class="btn btn-primary" :disabled="selectFaviconFile == null">
               Update Favicon
             </button>
           </div>
@@ -203,47 +182,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .image-placeholder {
-    width: 150px;
-    height: 150px;
-    background-color: #eeeeee;
-    /* overflow: hidden; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    img {
-      max-height: stretch;
-    }
+.image-placeholder {
+  width: 150px;
+  height: 150px;
+  background-color: #eeeeee;
+  /* overflow: hidden; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    max-height: stretch;
   }
+}
 
-   .card-body{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 1.5;
-      color: #212529;
-      text-align: left;
-      background-color: #fff;
+.card-body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
 
-        a {
-        color: #007bff;
-      }
+  a {
+    color: #007bff;
   }
+}
 
-  .nav-pills .nav-link {
-   color: #007bff;
-      &:visited {
-            color: #007bff;
-      }
+.nav-pills .nav-link {
+  color: #007bff;
+
+  &:visited {
+    color: #007bff;
   }
+}
 
-  .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-      color: #fff;
-      background-color: #007bff;
-  }
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+  color: #fff;
+  background-color: #007bff;
+}
 
-  a:visited {
-      color:  #007bff;
-  }
-
+a:visited {
+  color: #007bff;
+}
 </style>
