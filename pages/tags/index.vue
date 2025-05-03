@@ -9,15 +9,20 @@
             <div class="row profile-header">
               <div class="profile-avatar">
                 <!-- <img :src="tag.photo_url" alt class="profile-img" /> -->
-                <img title="" v-lazy-load :data-src="tag.photo_url" :alt="tag.name" class="profile-img" heigh="120"
-                  width="120">
-                <div style="text-align:center;overflow" @click="showDescription = !showDescription">
-                  <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="question-circle"
-                    class="svg-inline--fa fa-question-circle tooltip-icon" role="img" xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512">
-                    <path fill="currentColor"
-                      d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z">
-                    </path>
+                <img
+                  title=""
+                  v-lazy-load
+                  :data-src="tag.photo_url"
+                  :alt="tag.name"
+                  class="profile-img"
+                  heigh="120"
+                  width="120"
+                >
+                <div
+                  style="text-align:center;overflow"
+                  @click="showDescription = !showDescription"
+                >
+                  <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="question-circle" class="svg-inline--fa fa-question-circle tooltip-icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
                   </svg>
                 </div>
               </div>
@@ -27,17 +32,31 @@
                 </h2>
                 <div class="profile-count">
                   <post-counts :post_count="pageinateData.total"></post-counts>
-                  <following-counts :following_count="tag.followers_count"></following-counts>
+                  <following-counts
+                    :following_count="tag.followers_count"
+                  ></following-counts>
                 </div>
                 <div class="profile-buttons" v-if="signedIn">
-                  <button class="btn btn-sm unfollow-btn" @click.prevent="toggleFollow" v-if="isUserFollow">
+                  <button
+                    class="btn btn-sm unfollow-btn"
+                    @click.prevent="toggleFollow"
+                    v-if="isUserFollow"
+                  >
                     Unfllow
                   </button>
-                  <button class="btn btn-sm follow-btn" @click.prevent="toggleFollow" v-else>
+                  <button
+                    class="btn btn-sm follow-btn"
+                    @click.prevent="toggleFollow"
+                    v-else
+                  >
                     Follow
                   </button>
-                  <nuxt-link v-if="isAdmin" class="btn btn-sm btn-primary"
-                    :to="{ name: 'tag.edit', params: { slug: tag.slug } }">Edit Tag</nuxt-link>
+                  <nuxt-link
+                  v-if="isAdmin"
+                    class="btn btn-sm btn-primary"
+                    :to="{ name: 'tag.edit', params: { slug: tag.slug } }"
+                    >Edit Tag</nuxt-link
+                  >
 
                 </div>
               </div>
@@ -45,23 +64,37 @@
 
             <div class="row description" v-if="showDescription">
               <div class="col-md-12">
-                <div v-html="tag.description" style="overflow: hidden; overflow-wrap: anywhere"></div>
+                <div
+                  v-html="tag.description"
+                  style="overflow: hidden; overflow-wrap: anywhere"
+                ></div>
               </div>
             </div>
 
-            <safe-search :postCounts="postCounts" :totalThreadsCount="totalThreadsCount"></safe-search>
+              <safe-search :postCounts="postCounts" :totalThreadsCount="totalThreadsCount"></safe-search>
 
           </div>
         </div>
         <div></div>
 
-        <template v-if="$route.query.show && $route.query.show == 'all'">
-          <ThreadSimple v-for="thread in threads" :key="thread.id" :thread="thread" />
+        <template v-if="$route.query.show && $route.query.show == 'all' ">
+            <ThreadSimple
+            v-for="thread in threads"
+            :key="thread.id"
+            :thread="thread" />
         </template>
 
         <template v-else>
-          <SingleThread v-for="thread in threads" :key="thread.id" :thread="thread"></SingleThread>
-          <Pagination :pagination="pageinateData" routeName="tags" :param="{ key: 'slug', value: this.tag.slug }" />
+          <SingleThread
+            v-for="thread in threads"
+            :key="thread.id"
+            :thread="thread"
+          ></SingleThread>
+          <Pagination
+            :pagination="pageinateData"
+            routeName="tags"
+            :param="{ key: 'slug', value: this.tag.slug }"
+          />
         </template>
       </div>
       <div class="col-md-4">
@@ -90,7 +123,7 @@ import SafeSearch from '@/components/SafeSearch.vue';
 import ThreadSimple from '@/components/threads/ThreadSimple.vue'
 export default {
   name: 'index',
-  mixins: [scrollToTop, StrPlural, formatCount, userStatus],
+  mixins:[scrollToTop, StrPlural, formatCount, userStatus],
   components: {
     SingleThread,
     Sidebar,
@@ -143,13 +176,13 @@ export default {
           name: 'keywords',
         },
       ],
-      script: [
-        {
-          src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
-          ssr: false,
-          'data-ad-client': "ca-pub-4366805194029390",
-          preconnect: true,
-        }
+       script: [
+          {
+            src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js',
+            ssr: false ,
+            'data-ad-client':"ca-pub-4366805194029390",
+            preconnect: true,
+           }
       ]
     };
   },
@@ -224,7 +257,7 @@ export default {
 
 
 
-<style scoped>
+<style  scoped>
 .profile-header {
   margin: 30px auto;
   display: flex;
@@ -232,7 +265,6 @@ export default {
   margin-top: 10px;
   margin-bottom: 0px;
 }
-
 .profile-name {
   padding: 0;
   margin: 0;
@@ -240,16 +272,13 @@ export default {
   font-weight: 500;
   line-height: 40px;
 }
-
 .profile-name span {
   color: rgb(255, 67, 1);
   color: #ed7d30;
 }
-
 .profile-buttons {
   padding: 10px 0px;
 }
-
 .profile-img {
   width: 120px;
   height: 120px;
@@ -262,13 +291,12 @@ export default {
 .profile-avatar {
   margin-right: 30px;
 }
-
 .profile-count {
   display: flex;
   align-items: center;
 }
 
-.profile-count>* {
+.profile-count > * {
   margin-left: 5px;
   margin-right: 5px;
 }
@@ -288,18 +316,15 @@ export default {
 .single-tags-name {
   color: black;
 }
-
 .single-tags-name span {
   color: rgb(255, 67, 1);
 }
-
 .post-counts {
   color: black;
   padding: 0;
   font-weight: bold;
   padding-bottom: 0px;
 }
-
 .sidebar {
   /* margin: 30px auto; */
 }
@@ -332,7 +357,6 @@ export default {
   width: 100% !important;
   height: 350px !important;
 }
-
 .tox-tinymce {
   min-height: 500px !important;
 }
@@ -340,7 +364,6 @@ export default {
 .error {
   color: red;
 }
-
 .help-block.error {
   color: red;
 }
@@ -349,3 +372,4 @@ a.btn.cart-btn {
   font-size: 12px;
 }
 </style>
+

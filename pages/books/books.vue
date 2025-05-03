@@ -84,7 +84,7 @@
 
           <!-- File Uploads -->
           <div class="row mb-3">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="form-group">
                 <label class="form-label" for="cover_image">Cover Image <span class="text-danger">*</span></label>
                 <input
@@ -96,40 +96,16 @@
                 <div v-if="errors.cover_image" class="text-danger">{{ errors.cover_image[0] }}</div>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="form-group">
-                <label class="form-label" for="file_attachment_epub">EPUB File</label>
+                <label class="form-label" for="file_attachment">Attach File <span class="text-danger">*</span></label>
                 <input
-                  ref="fileAttachmentEpubInput"
+                  ref="fileAttachmentInput"
                   class="form-control"
                   type="file"
-                  @change="handleFileChange('file_attachment_epub', $event)"
+                  @change="handleFileChange('file_attachment', $event)"
                 />
-                <div v-if="errors.file_attachment_epub" class="text-danger">{{ errors.file_attachment_epub[0] }}</div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="form-label" for="file_attachment_pdf">PDF File</label>
-                <input
-                  ref="fileAttachmentPdfInput"
-                  class="form-control"
-                  type="file"
-                  @change="handleFileChange('file_attachment_pdf', $event)"
-                />
-                <div v-if="errors.file_attachment_pdf" class="text-danger">{{ errors.file_attachment_pdf[0] }}</div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label class="form-label" for="file_attachment_txt">TXT File</label>
-                <input
-                  ref="fileAttachmentTxtInput"
-                  class="form-control"
-                  type="file"
-                  @change="handleFileChange('file_attachment_txt', $event)"
-                />
-                <div v-if="errors.file_attachment_txt" class="text-danger">{{ errors.file_attachment_txt[0] }}</div>
+                <div v-if="errors.file_attachment" class="text-danger">{{ errors.file_attachment[0] }}</div>
               </div>
             </div>
           </div>
@@ -173,7 +149,6 @@
 
 <script>
 export default {
-  middleware: ['auth', 'admin'],
   data() {
     return {
       form: {
@@ -183,9 +158,7 @@ export default {
         author_name: '',
         publisher_date: '',
         cover_image: null,
-        file_attachment_epub: null,
-        file_attachment_pdf: null,
-        file_attachment_txt: null
+        file_attachment: null
       },
       errors: {},
       downloadPin: ''
@@ -218,8 +191,9 @@ export default {
       if (!this.form.publisher_date) this.errors.publisher_date = ['Publisher date is required.'];
       if (!this.downloadPin) this.errors.downloadPin = ['Download pin is required.'];
 
-      // Validate only cover image
+      // Validate file inputs
       if (!this.form.cover_image) this.errors.cover_image = ['Cover image is required.'];
+      if (!this.form.file_attachment) this.errors.file_attachment = ['File attachment is required.'];
 
       return Object.keys(this.errors).length === 0;
     },
@@ -235,37 +209,14 @@ export default {
       }
 
       const formData = new FormData();
-      
-      // Add basic form fields
-      formData.append('title', this.form.title);
-      formData.append('main_subject', this.form.main_subject);
-      formData.append('book_number', this.form.book_number);
-      formData.append('author_name', this.form.author_name);
-      formData.append('publisher_date', this.form.publisher_date);
+      for (const key in this.form) {
+        formData.append(key, this.form[key]);
+      }
       formData.append('DownloadPin', this.downloadPin);
-
-      // Handle file uploads
-      if (this.form.cover_image) {
-        formData.append('cover_image', this.form.cover_image);
-      }
-      
-      if (this.form.file_attachment_epub) {
-        formData.append('file_attachment_epub', this.form.file_attachment_epub);
-      }
-      
-      if (this.form.file_attachment_pdf) {
-        formData.append('file_attachment_pdf', this.form.file_attachment_pdf);
-      }
-      
-      if (this.form.file_attachment_txt) {
-        formData.append('file_attachment_txt', this.form.file_attachment_txt);
-      }
 
       try {
         const response = await this.$axios.post('https://anecdotage.com/api/books', formData, {
-          headers: { 
-            'Content-Type': 'multipart/form-data'
-          }
+          headers: { 'Content-Type': 'multipart/form-data' }
         });
 
         alert('Book created successfully!');
@@ -288,24 +239,20 @@ export default {
         author_name: '',
         publisher_date: '',
         cover_image: null,
-        file_attachment_epub: null,
-        file_attachment_pdf: null,
-        file_attachment_txt: null
+        file_attachment: null
       };
       this.errors = {};
       this.downloadPin = '';
 
       if (this.$refs.coverImageInput) this.$refs.coverImageInput.value = null;
-      if (this.$refs.fileAttachmentEpubInput) this.$refs.fileAttachmentEpubInput.value = null;
-      if (this.$refs.fileAttachmentPdfInput) this.$refs.fileAttachmentPdfInput.value = null;
-      if (this.$refs.fileAttachmentTxtInput) this.$refs.fileAttachmentTxtInput.value = null;
+      if (this.$refs.fileAttachmentInput) this.$refs.fileAttachmentInput.value = null;
     }
   }
 };
 </script>
 
 <style scoped>
-.table th {
+.table th{
   padding: 0.5rem;
 }
 </style>
