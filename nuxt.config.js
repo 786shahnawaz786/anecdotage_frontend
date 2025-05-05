@@ -1,14 +1,10 @@
 require('dotenv').config();
 const PRIMARY_HOSTS = `anecdotage.com`;
-import axios from 'axios'; // Use ESM import
+const axios = require('axios');
 
 export default {
   mode: 'universal',
-  target: 'static',
-  ssr:true,
-  serverMiddleware: [
-    '~/plugins/logger.js'
-  ],
+  target: 'server',
   head: {
     title: 'Anecdotage',
     meta: [
@@ -22,10 +18,7 @@ export default {
     script: [
       { src: 'https://code.jquery.com/jquery-3.5.1.slim.min.js', defer: true },
       { src: 'https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js', defer: true },
-      {
-        src: 'https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js',
-        defer: true
-      },
+      { hid: 'ckeditor', src: 'https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js', defer: true },
       { src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4366805194029390', defer: true, crossorigin: "anonymous" },
     ]
   },
@@ -38,7 +31,6 @@ export default {
   },
   plugins: [
     '~plugins/vform',
-     '~/plugins/error-handler.js',
     '~/plugins/toastNotification',
     { src: '~/plugins/gmaps', ssr: false },
     { src: '~/plugins/echo', ssr: false },
@@ -102,10 +94,22 @@ export default {
         '/', '/faq', '/tos', '/privacy', '/contact', '/login', '/register', '/anecdotes/maps', '/anecdotes/rated', '/anecdotes/trending', '/anecdotes/viewed', '/anecdotes/recent', '/anecdotes/closest', '/anecdotes/video',
       ];
 
+const url = `${process.env.API_URL}/sitemap/threads`;
+  console.log('Fetching sitemap from:', url);
+try{
+
       let threads = await axios.get(`${process.env.API_URL}/sitemap/threads`);
       const threadRoutes = threads.data.map(item => `/anecdotes/${item}`);
       return threadRoutes;
+
+} catch (err) {
+    console.error('Error fetching sitemap threads:', err.message);
+    return [];
+  }
+
     }
+
+
   },
   googleAnalytics: {
     id: process.env.GOOGLE_ANALYTICS_ID,
@@ -176,8 +180,5 @@ export default {
     base: process.env.NODE_ENV === 'dev' ? '/' : '/',
     trailingSlash: true,
   },
-  generate:{
-    dir: 'dist', 
-  }
 };
 

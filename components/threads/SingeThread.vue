@@ -9,9 +9,12 @@
       <div class="row">
         <div></div>
         <div class="col-md-12 tags">
-          <!-- <nuxt-link class="tag-name" :to="{ name: 'tags', params: { slug: thread.channel.slug } }">
+          <nuxt-link
+            class="tag-name"
+            :to="{ name: 'tags', params: { slug: thread.channel.slug } }"
+          >
             #{{ thread.channel.name }}
-          </nuxt-link> -->
+          </nuxt-link>
 
           <AdminButtons :thread="thread" />
         </div>
@@ -19,14 +22,19 @@
       </div>
       <div class="row thread-title-row">
         <div class="col-md-12">
-          <nuxt-link :to="{ name: 'threads.show', params: { slug: thread.slug } }" class="thread-title">
+          <nuxt-link
+            :to="{ name: 'threads.show', params: { slug: thread.slug } }"
+            class="thread-title"
+          >
             <strong v-html="thread.title"></strong>
           </nuxt-link>
         </div>
       </div>
       <div class="row count-items-row">
         <div class="col-md-12">
-          <div class="count-items d-flex flex-wrap justify-content-between align-items-center flex-wrap">
+          <div
+            class="count-items d-flex flex-wrap justify-content-between align-items-center flex-wrap"
+          >
             <view-counts :thread="thread"></view-counts>
             <point-counts :thread="thread"></point-counts>
             <comment-counts :thread="thread"></comment-counts>
@@ -34,67 +42,105 @@
 
             <emoji-counts :thread="thread" :emoji_counts="thread.emoji_counts"></emoji-counts>
             <div class="thread-map-icon">
-              <map-location :location="thread.location" :address="thread.formatted_address"></map-location>
+              <map-location
+                :location="thread.location"
+                :address="thread.formatted_address"
+              ></map-location>
             </div>
           </div>
         </div>
       </div>
       <div class="row" v-show="thread.thread_image_path != ''">
-        <div class="thread-thumbnail" :style="threadThumbStyle" @click="openThreadUrl">
-          <nuxt-link :to="{}">
+        <div
+          class="thread-thumbnail"
+          :style="threadThumbStyle"
+          @click="openThreadUrl"
+        >
+          <nuxt-link
+            :to="{}"
+          >
             <!-- <img
               :src="thread.thread_image_path"
               :alt="thread.title"
               class="thread-image thread_thumb_image"
             /> -->
 
-            <img title="" v-lazy-load :data-src="thread.thread_image_path" :alt="stripImageDescription"
-              class="thread-image thread_thumb_image" heigh="240" width="auto" style="width:auto;height:240px">
+            <img  title="" v-lazy-load
+              :data-src="thread.thread_image_path"
+              :alt="stripImageDescription"
+              class="thread-image thread_thumb_image"
+              heigh="240"
+              width="auto"
+              style="width:auto;height:240px"
+            >
 
           </nuxt-link>
         </div>
       </div>
       <div class="row image-description-row">
-        <image-description :thread="thread"></image-description>
+         <image-description :thread="thread"></image-description>
       </div>
       <div class="row thread-body-row">
         <div class="col-md-12">
 
-          <!-- <div class="thread-body" v-html="$options.filters.highlightText(thread.excerpt, queries)">
+              <!-- <div class="thread-body" v-html="$options.filters.highlightText(thread.excerpt, queries)">
               </div> -->
 
-          <div class="thread-body" v-html="thread.excerpt">
-          </div>
+              <div class="thread-body" v-html="thread.excerpt">
+              </div>
         </div>
       </div>
       <div class="row thread-tools-row">
         <div class="col-md-12">
-          <div class="thread-footer-menu d-flex justify-content-between align-items-center">
-            <vote-emoji-list :thread="thread" size="small" position="top"></vote-emoji-list>
+          <div
+            class="thread-footer-menu d-flex justify-content-between align-items-center"
+          >
+            <vote-emoji-list
+              :thread="thread"
+              size="small"
+              position="top"
+            ></vote-emoji-list>
             <div class="social-share-btn">
               <fb-share :thread="thread"></fb-share>
               <twitter-share :thread="thread"></twitter-share>
             </div>
-            <div class="thread-show-tools d-flex flex-wrap justify-content-between align-items-center">
+            <div
+              class="thread-show-tools d-flex flex-wrap justify-content-between align-items-center"
+            >
               <up-votes :thread="thread" size="small"></up-votes>
               <down-votes :thread="thread" size="small"></down-votes>
               <go-to-comment :thread="thread" size="small"></go-to-comment>
               <favorite-thread :thread="thread" size="small"></favorite-thread>
-              <vote-emojis :thread="thread" size="small" position="top"></vote-emojis>
+              <vote-emojis
+                :thread="thread"
+                size="small"
+                position="top"
+              ></vote-emojis>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div></div>
+  <div></div>
     <!-- Modal -->
-    <div class="modal fade" :id="`edit-title-${thread.id}`" tabindex="-1" role="dialog" aria-hidden="true"
-      v-show="isAdmin">
+    <div
+      class="modal fade"
+      :id="`edit-title-${thread.id}`"
+      tabindex="-1"
+      role="dialog"
+      aria-hidden="true"
+      v-show="isAdmin"
+    >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Edit title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -105,7 +151,11 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click.prevent="submit">
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click.prevent="submit"
+            >
               Update
             </button>
           </div>
@@ -150,8 +200,8 @@ export default {
     highlightText: function (str, queries) {
       const query = queries[0];
       const check = new RegExp(query, 'ig');
-      return str.toString().replace(check, function (matchedText, a, b) {
-        return (`<mark class="text__highlight">${matchedText}</mark>`);
+      return str.toString().replace(check, function (matchedText, a, b){
+        return (`<mark class="text__highlight">${ matchedText }</mark>`);
       });
       return str;
     }
@@ -196,9 +246,9 @@ export default {
     threadThumbStyle() {
       return `background: rgba(${this.thread.image_path_pixel_color});cursor:pointer;`;
     },
-    queries() {
-      if (this.$route.name === 'search' && this.$route.query.hasOwnProperty('q')) {
-        //  console.log(this.$route.query)
+    queries(){
+      if(this.$route.name === 'search' && this.$route.query.hasOwnProperty('q')){
+      //  console.log(this.$route.query)
         return [this.$route.query.q]
       }
 
@@ -206,7 +256,7 @@ export default {
     },
 
     stripImageDescription() {
-      if (this.thread.image_description) {
+      if(this.thread.image_description) {
         return this.thread.image_description.replace(/(<([^>]+)>)/gi, '');
       }
 
@@ -374,15 +424,13 @@ export default {
   margin: 5px 0;
   // padding:5px;
 }
-
 mark.text__highlight {
-  background-color: yellow !important;
+    background-color: yellow !important;
 }
 
 .tag-name {
   color: #ff4301;
 }
-
 .tag-name:link,
 .tag-name:visited {
   color: #ff4301;
@@ -392,14 +440,12 @@ mark.text__highlight {
   padding-right: 5px;
   padding-left: 5px;
 }
-
 .thread-title {
   color: #000;
   font-weight: normal;
   overflow-wrap: anywhere;
   font-weight: 700;
-  font-family: 'Merriweather', serif !important;
-
+      font-family: 'Merriweather', serif !important;
   //  & > *{
   //     font-family: 'Merriweather', serif !important;
   //   }
@@ -407,16 +453,13 @@ mark.text__highlight {
     font-family: 'Merriweather', serif !important;
   }
 
-  b,
-  strong {
+  b,strong {
     font-family: 'Merriweather', serif !important;
-
-    i {
-      font-family: 'Merriweather', serif !important;
-    }
+     i {
+       font-family: 'Merriweather', serif !important;
+     }
   }
 }
-
 // .count-items-row,
 // .thread-body-row {
 //   margin: 10px 0;
@@ -461,8 +504,8 @@ mark.text__highlight {
 }
 
 .thread-body {
-  color: black;
-  line-height: 22px;
+  color:black;
+  line-height:22px;
 }
 
 .thread-body p {
@@ -478,12 +521,12 @@ a.thread-title strong i {
 }
 
 a.thread-title {
-  &>* {
-    font-family: 'Merriweather', serif !important;
+  & > *{
+font-family: 'Merriweather', serif !important;
   }
 }
 
-.thread-title {
+.thread-title{
   font-size: 30px;
   line-height: 48px;
   font-weight: 700;
@@ -491,66 +534,57 @@ a.thread-title {
 }
 
 
-@media only screen and (max-width:600px) {
-  .thread-title {
-    font-size: 16px;
-    line-height: 20px;
-  }
-}
-
-// less 600px
+ @media only screen and (max-width:600px) {
+    .thread-title {
+      font-size: 16px;
+      line-height: 20px;
+    }
+  } // less 600px
 
 
-@media only screen and (min-width:600px) {
-  .thread-title {
-    font-size: 20px;
-    line-height: 25px;
-  }
-}
+ @media only screen and (min-width:600px) {
+    .thread-title {
+      font-size: 20px;
+      line-height: 25px;
+    }
+  } //600px
 
-//600px
+  @media only screen and (min-width: 900px) {
+     .thread-title {
+      font-size: 22px;
+      line-height: 30px;
+    }
+  } //900px
 
-@media only screen and (min-width: 900px) {
-  .thread-title {
-    font-size: 22px;
-    line-height: 30px;
-  }
-}
-
-//900px
-
-@media only screen and (min-width: 1200px) {
-  .thread-title {
-    font-size: 25px;
-    line-height: 35px;
-  }
-}
-
-//1200px
-@media only screen and (min-width: 1400px) {
-  .thread-title {
-    font-size: 28px;
-    line-height: 40px;
-  }
-}
-
-//1200px
+  @media only screen and (min-width: 1200px) {
+     .thread-title {
+      font-size: 25px;
+      line-height: 35px;
+    }
+  } //1200px
+  @media only screen and (min-width: 1400px) {
+     .thread-title {
+      font-size: 28px;
+      line-height: 40px;
+    }
+  } //1200px
 
 
-@media only screen and (min-width: 1800px) {
-  .thread-title {
-    font-size: 30px;
-    line-height: 48px;
-  }
-}
+  @media only screen and (min-width: 1800px) {
+     .thread-title {
+      font-size: 30px;
+      line-height: 48px;
+    }
+  } //1200px
 
-//1200px
+  @media only screen and (min-width: 1800px) {
+    .thread-title {
+      font-size: 30px;
+      line-height: 48px;
+    }
+  } //1800px
 
-@media only screen and (min-width: 1800px) {
-  .thread-title {
-    font-size: 30px;
-    line-height: 48px;
-  }
-}
 
-//1800px</style>
+
+
+</style>
