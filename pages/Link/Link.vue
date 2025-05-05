@@ -105,6 +105,13 @@
 
 <script>
 export default {
+  middleware: 'auth',
+  mounted() {
+    if (!this.$auth.loggedIn || this.$auth.user.email !== 'kakooljay@gmail.com') {
+      this.$router.push('/')
+    }
+    this.fetchLinks();
+  },
   data() {
     return {
       newLink: '',
@@ -113,9 +120,6 @@ export default {
       links: [],
       API_URL: "https://anecdotage.com/api/links",
     };
-  },
-  mounted() {
-    this.fetchLinks();
   },
   methods: {
     // Fetch all links from the API

@@ -4,9 +4,6 @@
       <div class="card-header">
          <h2 class="card-title big-label">Post an Anecdote</h2>
         </div>
-        
-        
-       
       <div class="card-body">
         <form
           class=""
@@ -40,7 +37,6 @@
                   <label class="form-check-label" for="title_case"
                     >Apply Title Case</label
                   >
-                   <button type="button" class="btn btn-primary">Primary</button>
                 </div>
               </div>
             </div>
@@ -137,7 +133,7 @@
                 <label for="body" class="control-label"
                   >Your Story (required)</label
                 >
-                <vue-ckeditor v-model="form.body" :config="config" />
+                <div id="editor"></div>
 
                 <p class="text-danger" v-if="form.errors.errors.body">
                   {{ form.errors.errors.body[0] }}
@@ -437,21 +433,35 @@
 </template>
 
 <script>
-import VueCkeditor from 'vue-ckeditor2';
 import { mapGetters } from 'vuex';
 import {serialize} from 'object-to-formdata'
 import scrollToTop from '@/mixins/scrollToTop'
 import userStatus from '@/mixins/userStatus'
 import createEditThread from '@/mixins/createEditThread'
 import ThreadShare from '@/mixins/threadShare'
+
 export default {
-  components: { VueCkeditor },
+  components: { },
   mixins: [scrollToTop,userStatus,createEditThread, ThreadShare],
 
   data() {
     return {
       title_case: true,
-      createdThread: {}
+      createdThread: {},
+      editor: null,
+      editorConfig: {
+        height: 300,
+        extraAllowedContent: 'iframe[*]',
+        contentsCss: [
+          'body {font-size: 22px;}',
+          'blockquote { display: block !important;}',
+          'blockquote { margin-block-start: 1em !important;}',
+          'blockquote { margin-block-end: 1em !important;}',
+          'blockquote { margin-inline-start: 40px !important;}',
+          'blockquote { margin-inline-end: 40px !important;}',
+        ],
+        scayt_autoStartup: true
+      }
     };
   },
   head() {
@@ -459,7 +469,65 @@ export default {
       title: `${this.settings.site_title} | Create New Thread`,
     };
   },
+  mounted() {
+    // Wait for CKEditor to be loaded
+    if (window.CKEDITOR) {
+      this.initEditor();
+    } else {
+      // If CKEditor is not loaded yet, wait for it
+      window.addEventListener('load', () => {
+        if (window.CKEDITOR) {
+          this.initEditor();
+        }
+      });
+    }
+  },
+  beforeDestroy() {
+    // Clean up editor instance
+    if (this.editor) {
+      this.editor.destroy();
+    }
+  },
+  watch: {
+    'form.title': {
+      handler(newVal) {
+        if (this.title_case && newVal) {
+          this.form.title = this.toTitleCase(newVal);
+        }
+      },
+      immediate: true
+    },
+    title_case: {
+      handler(newVal) {
+        if (newVal && this.form.title) {
+          this.form.title = this.toTitleCase(this.form.title);
+        }
+      }
+    }
+  },
   methods: {
+    toTitleCase(str) {
+      if (!str) return '';
+      return str.replace(
+        /\w\S*/g,
+        function(txt) {
+          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+      );
+    },
+    initEditor() {
+      this.editor = CKEDITOR.replace('editor', this.editorConfig);
+      
+      // Set initial content if needed
+      if (this.form.body) {
+        this.editor.setData(this.form.body);
+      }
+      
+      // Sync editor changes to v-model
+      this.editor.on('change', () => {
+        this.form.body = this.editor.getData();
+      });
+    },
     createAndGoThumb(){
      this.addNewThread().then(res=>{
        if (this.form.scrape_image) {

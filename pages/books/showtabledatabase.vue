@@ -51,6 +51,7 @@
 import axios from 'axios';
 
 export default {
+  middleware: ['auth', 'admin'],
   name: 'backup',
   data() {
     return {
