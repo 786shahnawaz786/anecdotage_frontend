@@ -1,4 +1,3 @@
-
 import Vue from 'vue';
 import Router from 'vue-router';
 Vue.use(Router);
@@ -6,9 +5,9 @@ Vue.use(Router);
 const page = path => () => import(`~/pages/${path}`).then(m => m.default || m);
 
 const routes = [
-  { path: '/', name: 'index', component: page('index.vue') },
-  { path: '/index.php', name: 'index', component: page('aid.vue') },
-  { path: '/browse.php', name: 'index', component: page('aid.vue') },
+  { path: '/', name: 'index-hone', component: page('index.vue') },
+  { path: '/index.php', name: 'index-index', component: page('aid.vue') },
+  { path: '/browse.php', name: 'index-browse', component: page('aid.vue') },
   { path: '/articles/:attribute/:value', name: 'index', component: page('aid.vue') },
   { path: '/faq', name: 'faq', component: page('faq.vue') },
   { path: '/tos', name: 'tos', component: page('tos.vue') },
@@ -17,17 +16,16 @@ const routes = [
   { path: '/contact', name: 'contact', component: page('contact.vue') },
   { path: '/login', name: 'login', component: page('auth/login.vue') },
 
-  { path: '/Links', name: 'Links', component: page('Link/Link.vue') },
+  { path: '/Links', name: 'Links', component: page('Link/Link.vue'), middleware: ['auth', 'check-email'] },
   { path: '/redirect', name: 'redirect', component: page('redirect/redirect.vue') },
   
 
-  { path: '/backup', name: 'backup', component: page('backup/backup.vue') },
-
-  { path: '/books/create', name: 'books-create', component: page('books/books.vue') },
-  { path: '/books', name: 'books', component: page('books/viewbooks.vue') },
-  { path: '/books/listbooks', name: 'listbooks', component: page('books/Listbooks.vue') },
-
-  { path: '/books/showtabledatabase', name: 'showtabledatabase', component: page('books/showtabledatabase.vue') },
+  { path: '/backup', name: 'backup', component: page('backup/backup.vue'), meta: { requiresAdmin: true } },
+  { path: '/books/create', name: 'books-create', component: page('books/books.vue'), meta: { requiresAdmin: true } },
+  { path: '/books/admin', name: 'books', component: page('books/viewbooks.vue'), meta: { requiresAdmin: true } },
+  { path: '/books', name: 'listbooks', component: page('books/Listbooks.vue'), meta: { requiresAdmin: true } },
+  { path: '/books/showtabledatabase', name: 'showtabledatabase', component: page('books/showtabledatabase.vue'), meta: { requiresAdmin: true } },
+  { path: '/books/covers', name: 'bookscoverImage', component: page('books/covers.vue')}, 
 
   { path: '/register', name: 'register', component: page('auth/register.vue') },
   {
@@ -215,6 +213,11 @@ const routes = [
     component: page('threads/create.vue')
   },
   {
+    path: '/threads/batch',
+    name: 'threads.batch',
+    component: page('threads/batch.vue')
+  },
+  {
     path: '/anecdotes/:slug/edit',
     name: 'threads.edit',
     component: page('threads/edit.vue')
@@ -309,8 +312,24 @@ const routes = [
 ];
 
 export function createRouter() {
-  return new Router({
+  const router = new Router({
     routes,
     mode: 'history'
   });
+
+  router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (!Vue.prototype.$auth.loggedIn) {
+        next('/login');
+      } else if (to.meta.allowedEmail && Vue.prototype.$auth.user.email !== to.meta.allowedEmail) {
+        next('/'); // or wherever you want to redirect unauthorized users
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
+  });
+
+  return router;
 }
