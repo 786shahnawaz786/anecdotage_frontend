@@ -29,13 +29,11 @@
         </button>
       </form>
 
-      <!-- Error message with dismiss button -->
       <div v-if="error" class="alert-message error">
         {{ error }}
         <button @click="dismissError" class="dismiss-btn">×</button>
       </div>
 
-      <!-- Success message with dismiss button -->
       <div v-if="success" class="alert-message success">
         {{ success }}
         <button @click="dismissSuccess" class="dismiss-btn">×</button>
@@ -44,87 +42,87 @@
   </div>
 </template>
 
-<script setup>
-import { ref, watch } from 'vue'
+<script>
+export default {
+  data() {
+    return {
+      watermark: '',
+      fontSize: 24,
+      fontColor: '#000000',
+      error: null,
+      success: null,
+      isLoading: false,
+      errorTimeout: null,
+      successTimeout: null
+    };
+  },
+  methods: {
+    dismissError() {
+      clearTimeout(this.errorTimeout);
+      this.error = null;
+    },
+    dismissSuccess() {
+      clearTimeout(this.successTimeout);
+      this.success = null;
+    },
+    autoHideAlerts() {
+      clearTimeout(this.errorTimeout);
+      clearTimeout(this.successTimeout);
+      if (this.error) {
+        this.errorTimeout = setTimeout(this.dismissError, 5000);
+      }
+      if (this.success) {
+        this.successTimeout = setTimeout(this.dismissSuccess, 5000);
+      }
+    },
+    async submitForm() {
+      this.dismissError();
+      this.dismissSuccess();
+      this.isLoading = true;
 
-const watermark = ref('')
-const fontSize = ref(24) // Default font size
-const fontColor = ref('#000000') // Default black color
-const error = ref(null)
-const success = ref(null)
-const isLoading = ref(false)
-let errorTimeout = null
-let successTimeout = null
+      try {
+        const response = await fetch('https://anecdotage.com/api/books/covers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            watermark: this.watermark.trim(),
+            fontSize: this.fontSize,
+            fontColor: this.fontColor
+          })
+        });
 
-const dismissError = () => {
-  clearTimeout(errorTimeout)
-  error.value = null
-}
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
 
-const dismissSuccess = () => {
-  clearTimeout(successTimeout)
-  success.value = null
-}
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `watermarked_${this.watermark}.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
 
-const autoHideAlerts = () => {
-  // Clear any existing timeouts
-  clearTimeout(errorTimeout)
-  clearTimeout(successTimeout)
-
-  // Set new timeouts (5 seconds)
-  if (error.value) {
-    errorTimeout = setTimeout(dismissError, 5000)
-  }
-  if (success.value) {
-    successTimeout = setTimeout(dismissSuccess, 5000)
-  }
-}
-
-// Watch for changes in error/success messages
-watch([error, success], autoHideAlerts)
-
-const submitForm = async () => {
-  dismissError()
-  dismissSuccess()
-  isLoading.value = true
-
-  try {
-    const response = await fetch('https://anecdotage.com/api/books/covers', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        watermark: watermark.value.trim(),
-        fontSize: fontSize.value,
-        fontColor: fontColor.value
-      })
-    })
-    console.log('Response:', response)
-    if (!response.ok) {
-      throw new Error(response.statusText || 'Failed to generate image')
+        this.success = 'Watermark generated successfully!';
+      } catch (err) {
+        this.error = err.message || 'Something went wrong. Please try again.';
+        console.error('Download failed:', err);
+      } finally {
+        this.isLoading = false;
+        this.autoHideAlerts();
+      }
     }
-
-    const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `watermarked_${watermark.value}.jpg`
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    window.URL.revokeObjectURL(url)
-
-    success.value = 'Watermark generated successfully!'
-  } catch (err) {
-    error.value = err.message || 'Something went wrong. Please try again.'
-    console.error('Download failed:', err)
-  } finally {
-    isLoading.value = false
+  },
+  watch: {
+    error: 'autoHideAlerts',
+    success: 'autoHideAlerts'
   }
-}
+};
 </script>
 
 <style scoped>
