@@ -513,7 +513,7 @@ export default {
       const loadingToast = this.showToast('Rewording content...', 'info', 0);
 
       try {
-        const response = await this.$axios.$post('http://127.0.0.1:8000/api/reword-content', {
+        const response = await this.$axios.$post('/reword-content', {
           text: this.form.body
         });
 
