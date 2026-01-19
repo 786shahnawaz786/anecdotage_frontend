@@ -49,6 +49,16 @@
                   </li>
                   <li class="nav-item">
                     <nuxt-link
+                      :to="{ name: 'admin.show.threads.batch' }"
+                      class="nav-link"
+                      :class="{
+                        active: $nuxt.$route.name == 'admin.show.threads.batch',
+                      }"
+                      >Threads Batch</nuxt-link
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <nuxt-link
                       :to="{ name: 'admin.show.manage.users' }"
                       class="nav-link"
                       :class="{

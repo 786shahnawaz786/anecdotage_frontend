@@ -306,6 +306,11 @@ const routes = [
         name: 'admin.show.delete',
         component: page('admins/delete.vue')
       },
+      {
+        path: 'threads/batch',
+        name: 'admin.show.threads.batch',
+        component: page('admins/threadsBatch.vue')
+      }
     ]
   },
 
