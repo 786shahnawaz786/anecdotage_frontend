@@ -133,7 +133,9 @@ export default {
       formData.append('pin', this.pin)
 
       try {
-        const response = await this.$axios.post('https://anecdotage.com/api/batch/process', formData, {
+        const isProd = false;
+        const apiUrl = isProd ? 'https://anecdotage.com/api/batch/process' : 'http://localhost:8000/api/batch/process';
+        const response = await this.$axios.post(apiUrl, formData, {
           onUploadProgress: (progressEvent) => {
             this.progress = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total

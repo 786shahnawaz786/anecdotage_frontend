@@ -18,14 +18,14 @@ const routes = [
 
   { path: '/Links', name: 'Links', component: page('Link/Link.vue'), middleware: ['auth', 'check-email'] },
   { path: '/redirect', name: 'redirect', component: page('redirect/redirect.vue') },
-  
+
 
   { path: '/backup', name: 'backup', component: page('backup/backup.vue'), meta: { requiresAdmin: true } },
   { path: '/books/create', name: 'books-create', component: page('books/books.vue'), meta: { requiresAdmin: true } },
   { path: '/books/admin', name: 'books', component: page('books/viewbooks.vue'), meta: { requiresAdmin: true } },
   { path: '/books', name: 'listbooks', component: page('books/Listbooks.vue'), meta: { requiresAdmin: true } },
   { path: '/books/showtabledatabase', name: 'showtabledatabase', component: page('books/showtabledatabase.vue'), meta: { requiresAdmin: true } },
-  { path: '/books/covers', name: 'bookscoverImage', component: page('books/covers.vue')}, 
+  { path: '/books/covers', name: 'bookscoverImage', component: page('books/covers.vue')},
 
   { path: '/register', name: 'register', component: page('auth/register.vue') },
   {
@@ -98,7 +98,7 @@ const routes = [
   },
   {
     path: '/profile/:username/settings',
-    name: 'profile.settings',
+    redirect: { name: 'profile.settings.info' },
     component: page('users/settings/index.vue'),
     children: [
       {
