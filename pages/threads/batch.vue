@@ -133,7 +133,7 @@ export default {
       formData.append('pin', this.pin)
 
       try {
-        const isProd = false;
+        const isProd = true;
         const apiUrl = isProd ? 'https://anecdotage.com/api/batch/process' : 'http://localhost:8000/api/batch/process';
         const response = await this.$axios.post(apiUrl, formData, {
           onUploadProgress: (progressEvent) => {
