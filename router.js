@@ -310,6 +310,11 @@ const routes = [
         path: 'threads/batch',
         name: 'admin.show.threads.batch',
         component: page('admins/threadsBatch.vue')
+      },
+      {
+        path: 'string-replacements',
+        name: 'admin.show.string.replacements',
+        component: page('admins/stringReplacements.vue')
       }
     ]
   },

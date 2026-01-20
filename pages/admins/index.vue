@@ -59,6 +59,16 @@
                   </li>
                   <li class="nav-item">
                     <nuxt-link
+                      :to="{ name: 'admin.show.string.replacements' }"
+                      class="nav-link"
+                      :class="{
+                        active: $nuxt.$route.name == 'admin.show.string.replacements',
+                      }"
+                      >String Replacements</nuxt-link
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <nuxt-link
                       :to="{ name: 'admin.show.manage.users' }"
                       class="nav-link"
                       :class="{
