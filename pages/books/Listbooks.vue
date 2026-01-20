@@ -27,41 +27,43 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-
-const watermark = ref('')
-const error = ref(null)
-
-const submitForm = async () => {
-  error.value = null
-  try {
-    const response = await fetch('https://anecdotage.com/api/books/covers', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      body: JSON.stringify({ watermark: watermark.value })
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to generate image')
+<script>
+export default {
+  data() {
+    return {
+      watermark: '',
+      error: null
     }
-
-    const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'watermarked.jpg'
-    document.body.appendChild(a)
-    a.click()
-    a.remove()
-    window.URL.revokeObjectURL(url)
-  } catch (err) {
-    error.value = err.message || 'Something went wrong.'
-    console.error('Download failed:', err)
+  },
+  methods: {
+    async submitForm() {
+      this.error = null
+      try {
+        const response = await fetch('https://anecdotage.com/api/books/covers', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          body: JSON.stringify({ watermark: this.watermark })
+        })
+        if (!response.ok) {
+          throw new Error('Failed to generate image')
+        }
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'watermarked.jpg'
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        window.URL.revokeObjectURL(url)
+      } catch (err) {
+        this.error = err.message || 'Something went wrong.'
+        console.error('Download failed:', err)
+      }
+    }
   }
 }
 </script>
