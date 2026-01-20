@@ -51,15 +51,15 @@
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h6 class="modal-title">Edit Thread #{{ selectedThread?.id }}</h6>
+						<h6 class="modal-title">Edit Thread #{{ selectedThread && selectedThread.id }}</h6>
 						<button type="button" class="close" aria-label="Close" @click="closeModal">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
 						<div class="mb-2">
-							<div class="small text-muted">{{ selectedThread?.slug }}</div>
-							<div class="font-weight-bold">{{ selectedThread?.title }}</div>
+							<div class="small text-muted">{{ selectedThread && selectedThread.slug }}</div>
+							<div class="font-weight-bold">{{ selectedThread && selectedThread.title }}</div>
 						</div>
 
 						<form @submit.prevent="applyReplace">
