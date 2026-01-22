@@ -19,6 +19,10 @@
           <input v-model="form.replace" type="text" class="form-control form-control-sm" placeholder="Replacement string" />
         </div>
         <div class="col-sm-2 mb-2">
+          <label class="small mb-1">Sort Order</label>
+          <input v-model.number="form.sort_order" type="number" class="form-control form-control-sm" placeholder="Sort order" min="0" />
+        </div>
+        <div class="col-sm-2 mb-2">
           <button class="btn btn-sm btn-primary w-100" :disabled="saving">Add</button>
         </div>
       </div>
@@ -57,20 +61,22 @@
             <th>Type</th>
             <th>Search</th>
             <th>Replace</th>
+            <th>Sort Order</th>
             <th class="text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="loading">
-            <td colspan="4">Loading…</td>
+            <td colspan="5">Loading…</td>
           </tr>
           <tr v-else-if="!items.length">
-            <td colspan="4" class="text-muted">No entries yet</td>
+            <td colspan="5" class="text-muted">No entries yet</td>
           </tr>
           <tr v-else v-for="item in items" :key="item.id">
             <td>{{ item.type }}</td>
             <td><code>{{ item.search }}</code></td>
             <td><code>{{ item.replace }}</code></td>
+            <td>{{ item.sort_order }}</td>
             <td class="text-right">
               <button class="btn btn-sm btn-outline-info mr-1" @click="editItem(item)">Edit</button>
               <button class="btn btn-sm btn-outline-danger" @click="deleteItem(item)" :disabled="deletingId === item.id">
@@ -112,6 +118,10 @@
                 <label class="small mb-1">Replace</label>
                 <input v-model="editForm.replace" type="text" class="form-control form-control-sm" />
               </div>
+              <div class="form-group">
+                <label class="small mb-1">Sort Order</label>
+                <input v-model.number="editForm.sort_order" type="number" class="form-control form-control-sm" min="0" />
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -132,9 +142,9 @@ export default {
       loading: false,
       saving: false,
       deletingId: null,
-      form: { type: 'pattern', search: '', replace: '' },
+      form: { type: 'pattern', search: '', replace: '', sort_order: null },
       showModal: false,
-      editForm: { id: null, type: 'pattern', search: '', replace: '' },
+      editForm: { id: null, type: 'pattern', search: '', replace: '', sort_order: null },
       perPage: 10,
       totalCount: 0,
       meta: { current_page: 1, last_page: 1 },
@@ -211,7 +221,7 @@ export default {
       this.saving = true
       try {
         await this.$axios.$post('/admin/string-replacements', this.form)
-        this.form = { type: 'pattern', search: '', replace: '' }
+        this.form = { type: 'pattern', search: '', replace: '', sort_order: null }
         this.$toast?.open?.({ type: 'success', position: 'top-right', message: 'Added successfully' })
         await this.fetchList()
       } catch (e) {
@@ -226,7 +236,7 @@ export default {
     },
     closeModal() {
       this.showModal = false
-      this.editForm = { id: null, type: 'pattern', search: '', replace: '' }
+      this.editForm = { id: null, type: 'pattern', search: '', replace: '', sort_order: null }
     },
     async updateItem() {
       if (!this.editForm.id) return
