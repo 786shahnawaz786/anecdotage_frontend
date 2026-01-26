@@ -3,24 +3,28 @@
     <h5 class="mb-3">String Replacements</h5>
     <form class="border rounded p-3 mb-4" @submit.prevent="addItem">
       <div class="form-row align-items-end">
-        <div class="col-sm-2 mb-2">
+        <div class="col-sm-4 mb-2">
           <label class="small mb-1">Type</label>
           <select v-model="form.type" class="form-control form-control-sm">
-            <option value="pattern">Pattern</option>
-            <option selected value="replacement">Replacement</option>
+            <option :value="form.type">{{ form.type }}</option>
+            <option value="overall_replacement">Overall Replacement</option>
+            <option value="body_youtube_replacement">Body Youtube Replacement</option>
+            <option value="body_amazon_replacement">Body Amazon Replacement</option>
           </select>
         </div>
-        <div class="col-sm-4 mb-2">
+        <div class="col-sm-3 mb-2">
           <label class="small mb-1">Search</label>
           <input v-model="form.search" type="text" class="form-control form-control-sm" placeholder="Search string" />
         </div>
-        <div class="col-sm-4 mb-2">
+        <div class="col-sm-3 mb-2">
           <label class="small mb-1">Replace</label>
-          <input v-model="form.replace" type="text" class="form-control form-control-sm" placeholder="Replacement string" />
+          <input v-model="form.replace" type="text" class="form-control form-control-sm"
+            placeholder="Replacement string" />
         </div>
         <div class="col-sm-2 mb-2">
           <label class="small mb-1">Sort Order</label>
-          <input v-model.number="form.sort_order" type="number" class="form-control form-control-sm" placeholder="Sort order" min="0" />
+          <input v-model.number="form.sort_order" type="number" class="form-control form-control-sm"
+            placeholder="Sort order" min="0" />
         </div>
         <div class="col-sm-2 mb-2">
           <button class="btn btn-sm btn-primary w-100" :disabled="saving">Add</button>
@@ -40,18 +44,22 @@
         <div class="input-group input-group-sm">
           <select v-model="typeFilter" class="form-control" style="max-width: 120px;">
             <option value="">All Types</option>
-            <option value="pattern">Pattern</option>
-            <option value="replacement">Replacement</option>
+            <option value="overall_replacement">Overall Replacement</option>
+            <option value="body_youtube_replacement">Body Youtube Replacement</option>
+            <option value="body_amazon_replacement">Body Amazon Replacement</option>
           </select>
           <input v-model="search" type="text" class="form-control" placeholder="Search filter...">
           <div class="input-group-append">
-            <button class="btn btn-outline-danger" @click="clearSearch" v-if="(search || typeFilter) && !loading">&times;</button>
+            <button class="btn btn-outline-danger" @click="clearSearch"
+              v-if="(search || typeFilter) && !loading">&times;</button>
           </div>
         </div>
       </div>
       <div class="btn-group">
-        <button class="btn btn-sm btn-outline-secondary" :disabled="meta.current_page <= 1 || loading" @click="goToPage(meta.current_page - 1)">Prev</button>
-        <button class="btn btn-sm btn-outline-secondary" :disabled="meta.current_page >= meta.last_page || loading" @click="goToPage(meta.current_page + 1)">Next</button>
+        <button class="btn btn-sm btn-outline-secondary" :disabled="meta.current_page <= 1 || loading"
+          @click="goToPage(meta.current_page - 1)">Prev</button>
+        <button class="btn btn-sm btn-outline-secondary" :disabled="meta.current_page >= meta.last_page || loading"
+          @click="goToPage(meta.current_page + 1)">Next</button>
       </div>
     </div>
     <div class="table-responsive">
@@ -79,7 +87,8 @@
             <td>{{ item.sort_order }}</td>
             <td class="text-right">
               <button class="btn btn-sm btn-outline-info mr-1" @click="editItem(item)">Edit</button>
-              <button class="btn btn-sm btn-outline-danger" @click="deleteItem(item)" :disabled="deletingId === item.id">
+              <button class="btn btn-sm btn-outline-danger" @click="deleteItem(item)"
+                :disabled="deletingId === item.id">
                 {{ deletingId === item.id ? 'Deleting…' : 'Delete' }}
               </button>
             </td>
@@ -92,7 +101,8 @@
       <div class="small text-muted">Page {{ meta.current_page || 1 }} of {{ meta.last_page || 1 }}</div>
     </div>
     <!-- Edit Modal -->
-    <div class="modal" tabindex="-1" role="dialog" :class="{ show: showModal }" v-if="showModal" style="display: block;">
+    <div class="modal" tabindex="-1" role="dialog" :class="{ show: showModal }" v-if="showModal"
+      style="display: block;">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -120,7 +130,8 @@
               </div>
               <div class="form-group">
                 <label class="small mb-1">Sort Order</label>
-                <input v-model.number="editForm.sort_order" type="number" class="form-control form-control-sm" min="0" />
+                <input v-model.number="editForm.sort_order" type="number" class="form-control form-control-sm"
+                  min="0" />
               </div>
             </form>
           </div>
@@ -142,7 +153,7 @@ export default {
       loading: false,
       saving: false,
       deletingId: null,
-      form: { type: 'pattern', search: '', replace: '', sort_order: null },
+      form: { type: 'overall_replacement', search: '', replace: '', sort_order: null },
       showModal: false,
       editForm: { id: null, type: 'pattern', search: '', replace: '', sort_order: null },
       perPage: 10,
