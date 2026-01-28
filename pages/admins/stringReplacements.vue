@@ -6,7 +6,6 @@
         <div class="col-sm-4 mb-2">
           <label class="small mb-1">Type</label>
           <select v-model="form.type" class="form-control form-control-sm">
-            <option :value="form.type">{{ form.type }}</option>
             <option value="overall_replacement">Overall Replacement</option>
             <option value="body_youtube_replacement">Body Youtube Replacement</option>
             <option value="body_amazon_replacement">Body Amazon Replacement</option>
@@ -116,8 +115,9 @@
               <div class="form-group">
                 <label class="small mb-1">Type</label>
                 <select v-model="editForm.type" class="form-control form-control-sm">
-                  <option value="pattern">Pattern</option>
-                  <option value="replacement">Replacement</option>
+                  <option value="overall_replacement">Overall Replacement</option>
+                  <option value="body_youtube_replacement">Body Youtube Replacement</option>
+                  <option value="body_amazon_replacement">Body Amazon Replacement</option>
                 </select>
               </div>
               <div class="form-group">
@@ -155,7 +155,7 @@ export default {
       deletingId: null,
       form: { type: 'overall_replacement', search: '', replace: '', sort_order: null },
       showModal: false,
-      editForm: { id: null, type: 'pattern', search: '', replace: '', sort_order: null },
+      editForm: { id: null, type: 'overall_replacement', search: '', replace: '', sort_order: null },
       perPage: 10,
       totalCount: 0,
       meta: { current_page: 1, last_page: 1 },
@@ -210,7 +210,7 @@ export default {
       }
     },
     applySearch() {
-      this.lastSearch = this.search.trim()
+      this.lastSearch = this.search
       this.lastTypeFilter = this.typeFilter
       this.meta.current_page = 1
       this.fetchList()
@@ -232,7 +232,7 @@ export default {
       this.saving = true
       try {
         await this.$axios.$post('/admin/string-replacements', this.form)
-        this.form = { type: 'pattern', search: '', replace: '', sort_order: null }
+        this.form = { type: 'overall_replacement', search: '', replace: '', sort_order: null }
         this.$toast?.open?.({ type: 'success', position: 'top-right', message: 'Added successfully' })
         await this.fetchList()
       } catch (e) {
@@ -247,7 +247,7 @@ export default {
     },
     closeModal() {
       this.showModal = false
-      this.editForm = { id: null, type: 'pattern', search: '', replace: '', sort_order: null }
+      this.editForm = { id: null, type: 'overall_replacement', search: '', replace: '', sort_order: null }
     },
     async updateItem() {
       if (!this.editForm.id) return
